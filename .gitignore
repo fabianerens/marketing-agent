@@ -8,6 +8,38 @@ wheels/
 
 # Virtual environments
 .venv
+venv/
+env/
 
 # Environment files
 .env
+
+# Data and cache
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Gradio
+gradio_cached_examples/
+flagged/

@@ -1,15 +1,59 @@
 [project]
-name = "gradio-adk-agent"
-version = "0.2.0"
-description = "Business Intelligence Agent with Gradio UI"
+name = "youtube-marketing-agent"
+version = "0.1.0"
+description = "YouTube Channel Marketing Analysis Agent using Google ADK"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
     "google-adk>=1.20.0",
+    "google-api-python-client>=2.100.0",
+    "google-auth>=2.23.0",
+    "google-auth-oauthlib>=1.1.0",
+    "google-auth-httplib2>=0.1.1",
     "gradio>=6.1.0",
-    "pyodbc>=5.0.0",
-    "sqlalchemy>=2.0.0",
-    "pandas>=2.0.0",
-    "altair>=5.0.0",
+    "pydantic>=2.0.0",
     "python-dotenv>=1.0.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "scikit-learn>=1.3.0",
+    "python-dateutil>=2.8.0",
+    "emoji>=2.8.0",
+    "isodate>=0.6.1",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["core", "core.*", "agent", "agent.*", "app", "app.*"]
+exclude = ["tests", "tests.*", "bi_agent", "bi_agent.*", "data", "data.*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
