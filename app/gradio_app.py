@@ -244,135 +244,293 @@ def analyze_channel_sync(
         )
 
 
+# Lighthouse-inspired CSS
+CUSTOM_CSS = """
+/* Base */
+body, .gradio-container, .main, .contain, .app {
+    background-color: #faf9f7 !important;
+}
+
+.gradio-container {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 48px 80px !important;
+    color: #1a1a1a !important;
+}
+
+/* All text black */
+.gradio-container,
+.gradio-container p,
+.gradio-container span,
+.gradio-container label,
+.gradio-container div,
+.gradio-container h1,
+.gradio-container h2,
+.gradio-container h3,
+.gradio-container h4,
+.gradio-container li,
+.gradio-container strong,
+.gradio-container em,
+.gradio-container code,
+.gradio-container pre,
+.gradio-container .prose,
+.gradio-container .prose *,
+.gradio-container .markdown-text,
+.gradio-container .markdown-text * {
+    color: #1a1a1a !important;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+/* Header */
+.header-section h1 {
+    font-size: 1.25rem !important;
+    font-weight: 500 !important;
+    color: #1a1a1a !important;
+    margin: 0 !important;
+    padding-bottom: 20px !important;
+    border-bottom: 1px solid #1a1a1a !important;
+}
+
+/* Hero Text */
+.hero-section p {
+    font-size: 1.75rem !important;
+    line-height: 1.4 !important;
+    font-weight: 400 !important;
+    color: #1a1a1a !important;
+    margin: 48px 0 !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* Section Labels */
+.section-label p {
+    font-size: 0.875rem !important;
+    color: #1a1a1a !important;
+    margin-bottom: 24px !important;
+}
+
+/* Form Container */
+.form-section {
+    max-width: 600px !important;
+    margin: 0 auto 32px auto !important;
+}
+
+/* Form field spacing */
+.form-section > div {
+    margin-bottom: 20px !important;
+}
+
+.form-section .row {
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Remove Gradio backgrounds */
+.gradio-container .block,
+.gradio-container .form,
+.gradio-container .wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Labels */
+.gradio-container label span {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: #1a1a1a !important;
+}
+
+/* Inputs */
+.gradio-container input[type="text"],
+.gradio-container textarea {
+    background: #fff !important;
+    border: 1px solid #1a1a1a !important;
+    border-radius: 4px !important;
+    padding: 12px 14px !important;
+    font-size: 1rem !important;
+    color: #1a1a1a !important;
+}
+
+.gradio-container input[type="text"]:focus,
+.gradio-container textarea:focus {
+    border-color: #1a1a1a !important;
+    outline: none !important;
+}
+
+/* Number Input */
+.gradio-container input[type="number"] {
+    background: #fff !important;
+    border: 1px solid #1a1a1a !important;
+    border-radius: 4px !important;
+    padding: 10px 12px !important;
+    color: #1a1a1a !important;
+}
+
+/* Sliders */
+.gradio-container input[type="range"] {
+    accent-color: #1a1a1a !important;
+}
+
+/* Button */
+.gradio-container button.primary {
+    background: #1a1a1a !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 14px 28px !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    max-width: 600px !important;
+    margin: 16px auto 0 auto !important;
+    display: block !important;
+}
+
+.gradio-container button.primary:hover {
+    background: #333 !important;
+}
+
+/* Results Section */
+.results-section {
+    margin-top: 48px !important;
+    padding-top: 32px !important;
+    border-top: 1px solid #e0e0e0 !important;
+    max-width: 600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Footer */
+.footer-section {
+    margin-top: 48px !important;
+    padding-top: 24px !important;
+    border-top: 1px solid #e0e0e0 !important;
+    max-width: 600px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.footer-section p {
+    font-size: 0.8rem !important;
+    color: #1a1a1a !important;
+    line-height: 1.6 !important;
+}
+
+/* Hide Gradio footer */
+footer {
+    display: none !important;
+}
+
+/* Info text */
+.gradio-container .info,
+.gradio-container span[data-testid="info"] {
+    font-size: 0.8rem !important;
+    color: #1a1a1a !important;
+}
+"""
+
+
+def get_css():
+    """Return the custom CSS."""
+    return CUSTOM_CSS
+
+
+def get_theme():
+    """Return the theme."""
+    return gr.themes.Base()
+
+
 def create_app() -> gr.Blocks:
     """
-    Create the Gradio app.
+    Create the Gradio app with Lighthouse-inspired design.
 
     Returns:
         Gradio Blocks app
     """
-    with gr.Blocks(title="YouTube Marketing Agent", theme=gr.themes.Soft()) as app:
+    with gr.Blocks(title="YouTube Marketing Agent") as app:
+        # Header
+        gr.Markdown("# Marketing Agent", elem_classes=["header-section"])
+
+        # Hero Text
         gr.Markdown(
-            """
-        # 🎬 YouTube Marketing Analysis Agent
-
-        **Powered by Google ADK + YouTube Data API v3**
-
-        Analyze YouTube channels to identify successful video formats and get AI-powered
-        marketing recommendations.
-
-        This agent:
-        - Fetches real YouTube data (views, likes, comments, duration)
-        - Calculates engagement KPIs (view velocity, engagement score)
-        - Identifies recurring format patterns (series, themes, duration buckets)
-        - Generates actionable recommendations using Gemini AI
-        """
+            "Wir analysieren YouTube-Kanäle, um erfolgreiche Videoformate zu identifizieren. "
+            "Als Grundlage für datengetriebene Marketingentscheidungen und nachhaltigen Erfolg.",
+            elem_classes=["hero-section"],
         )
 
-        with gr.Row():
-            with gr.Column(scale=2):
-                gr.Markdown("### 📊 Analysis Configuration")
+        # Section Label
+        gr.Markdown("Analyse Konfiguration", elem_classes=["section-label"])
 
-                channel_input = gr.Textbox(
-                    label="YouTube Channel",
-                    placeholder="Enter URL, @handle, or channel ID (e.g., @MrBeast)",
-                    info="Supports: youtube.com/channel/UCxxx, @username, or direct channel ID",
+        # Form - Centered
+        with gr.Column(elem_classes=["form-section"]):
+            channel_input = gr.Textbox(
+                label="YouTube Channel",
+                placeholder="URL, @handle oder Channel ID eingeben",
+                info="z.B. @MrBeast oder youtube.com/channel/UC...",
+            )
+
+            with gr.Row():
+                max_videos = gr.Slider(
+                    label="Max Videos",
+                    minimum=5,
+                    maximum=100,
+                    value=30,
+                    step=5,
                 )
-
-                with gr.Row():
-                    max_videos = gr.Slider(
-                        label="Max Videos to Analyze",
-                        minimum=5,
-                        maximum=100,
-                        value=30,
-                        step=5,
-                        info="More videos = better patterns, but slower analysis",
-                    )
-
-                    days_back = gr.Number(
-                        label="Days Back (Optional)",
-                        value=None,
-                        precision=0,
-                        info="Leave empty for all videos, or set to analyze recent videos only",
-                    )
-
-                gr.Markdown("### ⚖️ KPI Weights")
-                gr.Markdown("Adjust how engagement score is calculated:")
-
-                with gr.Row():
-                    like_weight = gr.Slider(
-                        label="Like Weight",
-                        minimum=0.0,
-                        maximum=1.0,
-                        value=0.6,
-                        step=0.1,
-                    )
-
-                    comment_weight = gr.Slider(
-                        label="Comment Weight",
-                        minimum=0.0,
-                        maximum=1.0,
-                        value=0.4,
-                        step=0.1,
-                    )
-
-                gr.Markdown("### 🔍 Filters")
-
-                exclude_keywords = gr.Textbox(
-                    label="Exclude Keywords (Optional)",
-                    placeholder="e.g., trailer, teaser, announcement",
-                    info="Comma-separated keywords to exclude from analysis",
-                )
-
-                min_views = gr.Number(
-                    label="Minimum Views",
-                    value=0,
+                days_back = gr.Number(
+                    label="Tage zurück",
+                    value=None,
                     precision=0,
-                    info="Filter out videos below this view count",
+                    info="Leer = alle Videos",
                 )
 
-                marketing_goal = gr.Textbox(
-                    label="Marketing Goal (Optional)",
-                    placeholder="e.g., Increase subscriber growth, Boost engagement on tech reviews",
-                    lines=2,
-                    info="Describe your goal for contextualized recommendations",
+            with gr.Row():
+                like_weight = gr.Slider(
+                    label="Like-Gewicht",
+                    minimum=0.0,
+                    maximum=1.0,
+                    value=0.6,
+                    step=0.1,
+                )
+                comment_weight = gr.Slider(
+                    label="Kommentar-Gewicht",
+                    minimum=0.0,
+                    maximum=1.0,
+                    value=0.4,
+                    step=0.1,
                 )
 
-                analyze_btn = gr.Button("🚀 Analyze Channel", variant="primary", size="lg")
+            exclude_keywords = gr.Textbox(
+                label="Keywords ausschließen",
+                placeholder="z.B. trailer, teaser, announcement",
+                info="Komma-getrennt",
+            )
 
-            with gr.Column(scale=3):
-                gr.Markdown("### 📈 Results")
+            min_views = gr.Number(
+                label="Minimum Views",
+                value=0,
+                precision=0,
+            )
 
-                status_output = gr.Markdown(
-                    value="*Ready to analyze. Configure parameters and click 'Analyze Channel'.*"
-                )
+            marketing_goal = gr.Textbox(
+                label="Marketing Ziel",
+                placeholder="z.B. Subscriber-Wachstum steigern",
+                lines=2,
+            )
 
-                error_output = gr.Markdown(value="", visible=True)
+            analyze_btn = gr.Button("Analyse starten", variant="primary", size="lg")
 
-                analysis_output = gr.Markdown(value="", visible=True)
+        # Results - Below, Centered
+        with gr.Column(elem_classes=["results-section"]):
+            gr.Markdown("Ergebnisse", elem_classes=["section-label"])
 
-        # Examples
-        gr.Markdown("### 💡 Example Channels")
-        gr.Examples(
-            examples=[
-                ["@MrBeast", 30, None, 0.6, 0.4, "", 0, "General viral content analysis"],
-                ["@MKBHD", 25, 90, 0.7, 0.3, "", 10000, "Tech product review optimization"],
-                ["@3blue1brown", 20, None, 0.5, 0.5, "", 0, "Educational content patterns"],
-                ["https://www.youtube.com/channel/UCsooa4yRKGN_zEE8iknghZA", 30, None, 0.6, 0.4, "", 0, ""],
-            ],
-            inputs=[
-                channel_input,
-                max_videos,
-                days_back,
-                like_weight,
-                comment_weight,
-                exclude_keywords,
-                min_views,
-                marketing_goal,
-            ],
-        )
+            status_output = gr.Markdown(value="*Bereit für Analyse.*")
+            error_output = gr.Markdown(value="")
+            analysis_output = gr.Markdown(value="")
 
-        # Event handlers
+        # Event handler
         analyze_btn.click(
             fn=analyze_channel_sync,
             inputs=[
@@ -394,17 +552,9 @@ def create_app() -> gr.Blocks:
 
         # Footer
         gr.Markdown(
-            """
-        ---
-
-        **Note**: This tool uses the YouTube Data API v3 which has quota limits.
-        Analysis is cached for 12 hours to minimize API usage.
-
-        **Data Source**: Public YouTube metrics (views, likes, comments, video metadata)
-
-        **Disclaimer**: Past performance doesn't guarantee future success. Use insights as
-        guidance, not absolute rules. Always respect YouTube's Terms of Service.
-        """
+            "Hinweis: Diese Analyse nutzt die YouTube Data API v3. "
+            "Die Ergebnisse dienen als Orientierung.",
+            elem_classes=["footer-section"],
         )
 
     return app

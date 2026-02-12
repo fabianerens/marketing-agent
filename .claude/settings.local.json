@@ -6,7 +6,9 @@
       "Bash(test:*)",
       "Bash(python:*)",
       "Bash(uv run python:*)",
-      "Bash(env)"
+      "Bash(env)",
+      "Bash(git checkout:*)",
+      "WebFetch(domain:lighthouse.de)"
     ]
   }
 }

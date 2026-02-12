@@ -18,7 +18,7 @@ logging.basicConfig(
 )
 
 # Import and launch Gradio app
-from app import create_app
+from app import create_app, get_css, get_theme
 
 if __name__ == "__main__":
     app = create_app()
@@ -26,4 +26,6 @@ if __name__ == "__main__":
         server_name="0.0.0.0",
         server_port=7860,
         share=False,
+        css=get_css(),
+        theme=get_theme(),
     )
