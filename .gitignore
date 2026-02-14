@@ -43,3 +43,6 @@ htmlcov/
 # Gradio
 gradio_cached_examples/
 flagged/
+
+# Claude
+.claude/

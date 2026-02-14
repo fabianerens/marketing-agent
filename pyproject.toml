@@ -36,7 +36,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 include = ["core", "core.*", "agent", "agent.*", "app", "app.*"]
-exclude = ["tests", "tests.*", "bi_agent", "bi_agent.*", "data", "data.*"]
+exclude = ["tests", "tests.*", "data", "data.*"]
 
 [tool.black]
 line-length = 100

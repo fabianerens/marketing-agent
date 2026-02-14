@@ -1,12 +1,5 @@
 """
 Gradio UI for YouTube Marketing Analysis Agent.
-
-Features:
-- Channel input (URL)
-- Analysis parameters (max videos, date range, KPI weights, filters)
-- Results display (markdown summary, video table, format clusters)
-- Refinement section (adjust parameters and re-run)
-- Error handling with user-friendly messages
 """
 
 import os
@@ -321,11 +314,6 @@ body, .gradio-container, .main, .contain, .app {
     margin-bottom: 20px !important;
 }
 
-.form-section .row {
-    gap: 16px !important;
-    margin-bottom: 20px !important;
-}
-
 /* Remove Gradio backgrounds */
 .gradio-container .block,
 .gradio-container .form,
@@ -433,23 +421,8 @@ footer {
 """
 
 
-def get_css():
-    """Return the custom CSS."""
-    return CUSTOM_CSS
-
-
-def get_theme():
-    """Return the theme."""
-    return gr.themes.Base()
-
-
 def create_app() -> gr.Blocks:
-    """
-    Create the Gradio app with Lighthouse-inspired design.
-
-    Returns:
-        Gradio Blocks app
-    """
+    """Create the Gradio app."""
     with gr.Blocks(title="YouTube Marketing Agent") as app:
         # Header
         gr.Markdown("# Marketing Agent", elem_classes=["header-section"])
@@ -551,11 +524,17 @@ def create_app() -> gr.Blocks:
 
 def main():
     """Launch the Gradio app."""
-    # Configure logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    )
+    # Suppress noisy logs but keep Gradio output
+    import warnings
+    warnings.filterwarnings("ignore")
+    logging.getLogger("httpx").setLevel(logging.ERROR)
+    logging.getLogger("google.adk").setLevel(logging.ERROR)
+    logging.getLogger("google.adk.runners").setLevel(logging.ERROR)
+
+    print("\n🎬 YouTube Marketing Agent")
+    print("=" * 40)
+    print("URL: http://localhost:7860/")
+    print("=" * 40)
 
     # Create and launch app
     app = create_app()
@@ -563,6 +542,8 @@ def main():
         server_name="0.0.0.0",
         server_port=7860,
         share=False,
+        css=CUSTOM_CSS,
+        theme=gr.themes.Base(),
     )
 
 

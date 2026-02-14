@@ -46,8 +46,8 @@ echo ""
 
 # Run app
 if command -v uv &> /dev/null; then
-    uv run python app.py
+    uv run python -m app.gradio_app
 else
     source .venv/bin/activate
-    python app.py
+    python -m app.gradio_app
 fi

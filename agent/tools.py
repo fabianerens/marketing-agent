@@ -193,14 +193,14 @@ def get_channel_info_tool(channel_identifier: str) -> Dict[str, Any]:
         Dictionary with channel info or error
     """
     try:
-        channel_id = youtube_client.resolve_channel_id(channel_identifier)
+        channel_id = _get_youtube_client().resolve_channel_id(channel_identifier)
         if not channel_id:
             return {
                 "success": False,
                 "error": f"Could not resolve channel: {channel_identifier}"
             }
 
-        channel_info = youtube_client.get_channel_info(channel_id)
+        channel_info = _get_youtube_client().get_channel_info(channel_id)
         if not channel_info:
             return {
                 "success": False,

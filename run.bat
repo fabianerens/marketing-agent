@@ -31,12 +31,12 @@ echo.
 REM Check for uv
 where uv >nul 2>nul
 if %ERRORLEVEL% EQU 0 (
-    uv run python app.py
+    uv run python -m app.gradio_app
 ) else (
     REM Check for virtual environment
     if exist .venv\Scripts\activate.bat (
         call .venv\Scripts\activate.bat
-        python app.py
+        python -m app.gradio_app
     ) else (
         echo ⚠️  No virtual environment found
         echo.
@@ -48,6 +48,6 @@ if %ERRORLEVEL% EQU 0 (
         echo ✓ Dependencies installed
         echo.
         echo 🚀 Starting application...
-        python app.py
+        python -m app.gradio_app
     )
 )

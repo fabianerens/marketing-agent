@@ -72,9 +72,9 @@ install-dev:
 run:
 	@echo "Starting YouTube Marketing Agent..."
 	@if command -v uv >/dev/null 2>&1; then \
-		uv run python app.py; \
+		uv run python -m app.gradio_app; \
 	else \
-		python app.py; \
+		python -m app.gradio_app; \
 	fi
 
 # Run tests
@@ -92,13 +92,13 @@ test-cov:
 # Format code
 format:
 	@echo "Formatting code..."
-	black core/ agent/ app/ tests/ app.py
+	black core/ agent/ app/ tests/
 	@echo "✓ Code formatted"
 
 # Lint code
 lint:
 	@echo "Linting code..."
-	ruff check core/ agent/ app/ tests/ app.py
+	ruff check core/ agent/ app/ tests/
 	@echo "✓ Linting complete"
 
 # Clean build artifacts
