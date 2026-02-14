@@ -2,7 +2,7 @@
 Gradio UI for YouTube Marketing Analysis Agent.
 
 Features:
-- Channel input (URL/@handle/ID)
+- Channel input (URL)
 - Analysis parameters (max videos, date range, KPI weights, filters)
 - Results display (markdown summary, video table, format clusters)
 - Refinement section (adjust parameters and re-run)
@@ -81,11 +81,11 @@ async def analyze_channel_async(
     Run the agent analysis asynchronously.
 
     Args:
-        channel_input: Channel URL/@handle/ID
+        channel_input: Channel URL
         max_videos: Maximum videos to analyze
         days_back: Days back filter (or None)
-        like_weight: Like weight for engagement
-        comment_weight: Comment weight for engagement
+        like_weight: Like weight for engagement (0-1)
+        comment_weight: Comment weight for engagement (calculated as 1 - like_weight)
         exclude_keywords: Comma-separated keywords to exclude
         min_views: Minimum view count
         marketing_goal: User's marketing goal
@@ -147,7 +147,6 @@ def analyze_channel_sync(
     max_videos: int,
     days_back: Optional[int],
     like_weight: float,
-    comment_weight: float,
     exclude_keywords: str,
     min_views: int,
     marketing_goal: str,
@@ -158,12 +157,14 @@ def analyze_channel_sync(
     Returns:
         Tuple of (status_message, analysis_markdown, error_message)
     """
+    # Calculate comment weight from like weight
+    comment_weight = 1.0 - like_weight
     # Validation
     if not channel_input or not channel_input.strip():
         return (
             "❌ Error",
             "",
-            "Please enter a valid YouTube channel URL, @handle, or channel ID.",
+            "Please enter a valid YouTube channel URL",
         )
 
     # Check API keys
@@ -211,7 +212,7 @@ def analyze_channel_sync(
             return (
                 "❌ Invalid Channel",
                 analysis_text,
-                "The channel identifier could not be resolved. Please check the URL/@handle/ID.",
+                "The channel identifier could not be resolved. Please check the URL.",
             )
 
         if "NO_VIDEOS" in analysis_text or "No videos found" in analysis_text:
@@ -460,52 +461,41 @@ def create_app() -> gr.Blocks:
             elem_classes=["hero-section"],
         )
 
-        # Section Label
-        gr.Markdown("Analyse Konfiguration", elem_classes=["section-label"])
-
         # Form - Centered
         with gr.Column(elem_classes=["form-section"]):
             channel_input = gr.Textbox(
                 label="YouTube Channel",
-                placeholder="URL, @handle oder Channel ID eingeben",
-                info="z.B. @MrBeast oder youtube.com/channel/UC...",
+                placeholder="URL",
+                info="z.B. GQ: https://www.youtube.com/@GQVideos",
             )
 
-            with gr.Row():
-                max_videos = gr.Slider(
-                    label="Max Videos",
-                    minimum=5,
-                    maximum=100,
-                    value=30,
-                    step=5,
-                )
-                days_back = gr.Number(
-                    label="Tage zurück",
-                    value=None,
-                    precision=0,
-                    info="Leer = alle Videos",
-                )
+            max_videos = gr.Slider(
+                label="Max Videos",
+                minimum=5,
+                maximum=100,
+                value=30,
+                step=5,
+            )
 
-            with gr.Row():
-                like_weight = gr.Slider(
-                    label="Like-Gewicht",
-                    minimum=0.0,
-                    maximum=1.0,
-                    value=0.6,
-                    step=0.1,
-                )
-                comment_weight = gr.Slider(
-                    label="Kommentar-Gewicht",
-                    minimum=0.0,
-                    maximum=1.0,
-                    value=0.4,
-                    step=0.1,
-                )
+            days_back = gr.Number(
+                label="Tage zurück",
+                value=None,
+                precision=0,
+                info="Leer = alle Videos",
+            )
+
+            like_weight = gr.Slider(
+                label="Gewichtung (Likes ↔ Kommentare)",
+                minimum=0.0,
+                maximum=1.0,
+                value=0.6,
+                step=0.1,
+                info="0 = nur Kommentare, 1 = nur Likes",
+            )
 
             exclude_keywords = gr.Textbox(
                 label="Keywords ausschließen",
                 placeholder="z.B. trailer, teaser, announcement",
-                info="Komma-getrennt",
             )
 
             min_views = gr.Number(
@@ -538,7 +528,6 @@ def create_app() -> gr.Blocks:
                 max_videos,
                 days_back,
                 like_weight,
-                comment_weight,
                 exclude_keywords,
                 min_views,
                 marketing_goal,
