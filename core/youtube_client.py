@@ -2,7 +2,7 @@
 YouTube Data API v3 Client.
 
 This module handles all interactions with the YouTube Data API:
-- Channel resolution (URL/@handle/ID -> channel_id)
+- Channel resolution (URL -> channel_id)
 - Video list retrieval
 - Video details/statistics fetching
 - Rate limit handling
@@ -46,7 +46,7 @@ class YouTubeClient:
         - Direct channel IDs: UC...
 
         Args:
-            identifier: Channel URL, handle, or ID
+            identifier: Channel URL
 
         Returns:
             Channel ID or None if not found
